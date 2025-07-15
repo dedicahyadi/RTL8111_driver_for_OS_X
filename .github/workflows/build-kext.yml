@@ -1,0 +1,25 @@
+name: Build RTL8111 Driver
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Install Xcode Command Line Tools
+        run: sudo xcode-select --switch /Applications/Xcode.app
+
+      - name: Build Kext with xcodebuild
+        run: |
+          xcodebuild -project "RealtekRTL8111.xcodeproj" -configuration Release -target RealtekRTL8111
+
+      - name: Upload Kext
+        uses: actions/upload-artifact@v4
+        with:
+          name: RealtekRTL8111.kext
+          path: build/Release/RealtekRTL8111.kext
